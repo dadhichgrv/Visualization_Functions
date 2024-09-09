@@ -1,0 +1,16 @@
+# Make Value Count first
+serv_cnt = df_base[['TPID','Recommended_Service','Rank']].drop_duplicates()
+serv_cnt_df = pd.pivot_table(serv_cnt,index='Recommended_Service',columns='Rank',values='TPID',aggfunc='count').reset_index()
+
+def make_pie_chart(data,variable):
+  fig = plt.figure(figsize=(10,6))
+  gs = GridSpec(1,1,figure=fig)
+  ax2 = fig.add_subplot(gs[0,:]) # pie chart
+  colors = sns.color_palette("colorblind", len(data['Recommended_Service'])) 
+  explode = [0.1 if i == data[variable].idxmax() else 0 for i in range(len(data))] 
+  ax2.pie(data[variable],labels=data['Recommended_Service'],autopct='%1.1f%%',shadow=True,startangle=90,colors=colors, wedgeprops={'edgecolor': 'white'},pctdistance=0.85, labeldistance=1.05,explode=explode)
+  ax2.set_title("Pie Chart "+ str(variable))
+  ax2.legend(loc="center left", bbox_to_anchor=(1, 0.5), title="Services", fontsize=10)
+  ax2.axis('equal')
+
+make_bar_chart(serv_cnt_df,1.0) # Here 1.0 is column name which contains count
