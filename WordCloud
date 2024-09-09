@@ -1,0 +1,12 @@
+def make_word_cloud(data,variable):
+  fig = plt.figure(figsize=(8,6))
+  gs = GridSpec(1,1,figure=fig)
+  ax2 = fig.add_subplot(gs[0,:]) 
+  text = ' '.join(data[variable])
+  wc = WordCloud(width=800,height=400,background_color="white",collocations=False).generate(text)
+  plt.imshow(wc,interpolation='bilinear')
+  plt.axis('off')
+  plt.show()
+
+
+make_word_cloud(df_base[df_base['Rank']==1.0], "Recommended_Service")
