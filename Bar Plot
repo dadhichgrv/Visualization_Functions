@@ -1,0 +1,21 @@
+# Make Pivot table
+serv_cnt = df_base[['TPID','Recommended_Service','Rank']].drop_duplicates()
+serv_cnt_df = pd.pivot_table(serv_cnt,index='Recommended_Service',columns='Rank',values='TPID',aggfunc='count').reset_index()
+
+def make_bar_chart(data,variable):
+  fig = plt.figure(figsize=(10,6))
+  gs = GridSpec(1,1,figure=fig)
+  ax1 = fig.add_subplot(gs[0,:]) # bar chart
+
+  sorted_df = data.sort_values(by=variable,ascending=False)
+  colors = sns.color_palette("colorblind", len(data['Recommended_Service'])) 
+  barplot = ax1.bar(x= sorted_df['Recommended_Service'],height = sorted_df[variable],color=colors,label=variable)
+
+  ax1.bar_label(barplot)
+  ax1.set_xticklabels(sorted_df['Recommended_Service'],rotation=90)
+  ax1.set(title="Bar Plot "+str(variable),ylabel="Count",xlabel="Recommended Service")
+
+  plt.tight_layout()
+  plt.show()
+
+make_bar_chart(serv_cnt_df,1.0) # Here 1.0 is column name that has count values
